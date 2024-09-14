@@ -1,224 +1,269 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Calculator implements ActionListener {
 
-    JFrame frame;
-    JTextField textfield;
-    JButton[] numberButtons = new JButton[10];
-    JButton[] functionButtons = new JButton[6]; // Adjusted size to 6
-    JButton addButton, subButton, mulButton, divButton;
-    JButton equButton, clrButton;
-    JPanel panel;
+    // GUI components
+    private JFrame frameCalculator; // Main frame for the calculator
+    private JTextField fieldDisplay; // Display field for showing input and results
+    private JButton[] buttonsDigits = new JButton[10]; // Digit buttons (0-9)
+    private JButton buttonAdd, buttonSubtract, buttonMultiply, buttonDivide, buttonEquals, buttonClear; // Operation
+                                                                                                        // buttons
+    private JPanel panelButtons; // Panel to hold buttons
+    private Font fontDisplay = new Font("Arial", Font.BOLD, 24); // Font for display and buttons
+    private StringBuilder expressionInput = new StringBuilder(); // To store the current expression
 
-    Font myFont = new Font("Arial", Font.PLAIN, 24); // Updated Font
+    // Color scheme for the calculator
+    private Color backgroundColor = new Color(30, 30, 30); // Background color for frame and panel
+    private Color buttonColor = new Color(60, 60, 60); // Color for digit and operation buttons
+    private Color equalsButtonColor = new Color(0, 122, 204); // Color for equals button
+    private Color textColor = Color.WHITE; // Text color for buttons
 
-    StringBuilder currentExpression = new StringBuilder(); // Store the current expression
+    public Calculator() {
+        // Initialize components and show the frame
+        initializeFrame();
+        initializeDisplay();
+        initializeButtons();
+        initializePanel();
 
-    Calculator() {
-        frame = new JFrame("Calculator");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 550);
-        frame.setLayout(null);
+        frameCalculator.setVisible(true); // Make the frame visible
+    }
 
-        // Text field
-        textfield = new JTextField();
-        textfield.setBounds(30, 25, 340, 50);
-        textfield.setFont(myFont);
-        textfield.setEditable(false);
-        textfield.setHorizontalAlignment(JTextField.RIGHT);
-        textfield.setText("0"); // Initialize with 0
+    // Initialize the main frame
+    private void initializeFrame() {
+        frameCalculator = new JFrame("Calculator");
+        frameCalculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameCalculator.setSize(400, 550);
+        frameCalculator.setLayout(null); // Use no layout manager
+        frameCalculator.getContentPane().setBackground(backgroundColor); // Set background color
+    }
 
-        // Function buttons
-        addButton = new JButton("+");
-        subButton = new JButton("-");
-        mulButton = new JButton("*");
-        divButton = new JButton("/");
-        equButton = new JButton("=");
-        clrButton = new JButton("C"); // Clear button
+    // Initialize the display field
+    private void initializeDisplay() {
+        fieldDisplay = new JTextField("0"); // Default display value is 0
+        fieldDisplay.setBounds(30, 25, 340, 50); // Set position and size
+        fieldDisplay.setFont(fontDisplay); // Set font
+        fieldDisplay.setEditable(false); // Display is not editable directly
+        fieldDisplay.setHorizontalAlignment(JTextField.RIGHT); // Align text to the right
+        fieldDisplay.setBackground(Color.WHITE); // Background color of display
+        fieldDisplay.setForeground(Color.BLACK); // Text color of display
+        fieldDisplay.setBorder(BorderFactory.createEmptyBorder()); // Remove border
+        frameCalculator.add(fieldDisplay); // Add display to frame
+    }
 
-        // Assign function buttons to array
-        functionButtons[0] = addButton;
-        functionButtons[1] = subButton;
-        functionButtons[2] = mulButton;
-        functionButtons[3] = divButton;
-        functionButtons[4] = equButton;
-        functionButtons[5] = clrButton;
+    // Initialize all buttons (digits and operations)
+    private void initializeButtons() {
+        // Create operation buttons
+        buttonAdd = createButton("+");
+        buttonSubtract = createButton("-");
+        buttonMultiply = createButton("*");
+        buttonDivide = createButton("/");
+        buttonEquals = createButton("=");
+        buttonClear = createButton("C");
+        buttonEquals.setBackground(equalsButtonColor); // Set specific color for equals button
 
-        // Style function buttons
-        for (int i = 0; i < functionButtons.length; i++) {
-            functionButtons[i].addActionListener(this);
-            functionButtons[i].setFont(myFont);
-            functionButtons[i].setFocusable(false);
-        }
-
-        // Style number buttons
+        // Create digit buttons (0-9)
         for (int i = 0; i < 10; i++) {
-            numberButtons[i] = new JButton(String.valueOf(i));
-            numberButtons[i].addActionListener(this);
-            numberButtons[i].setFont(myFont);
-            numberButtons[i].setFocusable(false);
+            buttonsDigits[i] = createButton(String.valueOf(i));
         }
-
-        // Panel layout for number and operation buttons
-        panel = new JPanel();
-        panel.setBounds(30, 100, 340, 340);
-        panel.setLayout(new GridLayout(4, 4, 10, 10));
-
-        // Adding buttons to the panel in order
-        panel.add(numberButtons[1]);
-        panel.add(numberButtons[2]);
-        panel.add(numberButtons[3]);
-        panel.add(addButton);
-        panel.add(numberButtons[4]);
-        panel.add(numberButtons[5]);
-        panel.add(numberButtons[6]);
-        panel.add(subButton);
-        panel.add(numberButtons[7]);
-        panel.add(numberButtons[8]);
-        panel.add(numberButtons[9]);
-        panel.add(mulButton);
-        panel.add(numberButtons[0]);
-        panel.add(equButton);
-        panel.add(clrButton);
-        panel.add(divButton);
-
-        // Adding components to the frame
-        frame.add(panel);
-        frame.add(textfield);
-        frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new Calculator();
+    // Initialize the panel to hold all buttons
+    private void initializePanel() {
+        panelButtons = new JPanel();
+        panelButtons.setBounds(30, 100, 340, 340); // Set position and size of the panel
+        panelButtons.setLayout(new GridLayout(4, 4, 10, 10)); // Grid layout for buttons
+        panelButtons.setBackground(backgroundColor); // Set panel background color
+
+        // Add buttons to the panel in order
+        panelButtons.add(buttonsDigits[1]);
+        panelButtons.add(buttonsDigits[2]);
+        panelButtons.add(buttonsDigits[3]);
+        panelButtons.add(buttonAdd);
+        panelButtons.add(buttonsDigits[4]);
+        panelButtons.add(buttonsDigits[5]);
+        panelButtons.add(buttonsDigits[6]);
+        panelButtons.add(buttonSubtract);
+        panelButtons.add(buttonsDigits[7]);
+        panelButtons.add(buttonsDigits[8]);
+        panelButtons.add(buttonsDigits[9]);
+        panelButtons.add(buttonMultiply);
+        panelButtons.add(buttonsDigits[0]);
+        panelButtons.add(buttonEquals);
+        panelButtons.add(buttonClear);
+        panelButtons.add(buttonDivide);
+
+        frameCalculator.add(panelButtons); // Add the panel to the frame
     }
 
+    // Helper method to create a button with specified text and styling
+    private JButton createButton(String text) {
+        JButton button = new JButton(text); // Create button with text
+        button.setFont(fontDisplay); // Set font for button
+        button.setFocusable(false); // Remove focus border on click
+        button.setBackground(buttonColor); // Set button background color
+        button.setForeground(textColor); // Set button text color
+        button.setBorder(BorderFactory.createLineBorder(buttonColor)); // Minimalist border
+        button.addActionListener(this); // Register this class as the listener for button actions
+        return button;
+    }
+
+    // Handle button click events
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Check if a digit button was clicked
         for (int i = 0; i < 10; i++) {
-            if (e.getSource() == numberButtons[i]) {
-                if (textfield.getText().equals("0")) { // Clear if the initial value is 0
-                    textfield.setText("");
-                    currentExpression.setLength(0); // Reset the expression
-                }
-                textfield.setText(textfield.getText().concat(String.valueOf(i)));
-                currentExpression.append(i); // Append the number to the current expression
+            if (e.getSource() == buttonsDigits[i]) {
+                appendDigit(i); // Append the digit to the current expression
+                return; // Exit method after handling digit input
             }
         }
 
-        if (e.getSource() == addButton) {
-            handleOperator('+');
-        } else if (e.getSource() == subButton) {
-            handleOperator('-');
-        } else if (e.getSource() == mulButton) {
-            handleOperator('*');
-        } else if (e.getSource() == divButton) {
-            handleOperator('/');
-        }
-
-        if (e.getSource() == equButton) {
-            try {
-                double result = evaluateExpression(currentExpression.toString());
-                textfield.setText(String.valueOf(result));
-                currentExpression.setLength(0); // Reset expression after showing the result
-                currentExpression.append(result); // Store the result for the next calculation
-            } catch (Exception ex) {
-                textfield.setText("Error");
-                currentExpression.setLength(0); // Reset the expression on error
-            }
-        }
-
-        if (e.getSource() == clrButton) {
-            textfield.setText("0");
-            currentExpression.setLength(0); // Clear the expression
+        // Check if an operator button was clicked
+        if (e.getSource() == buttonAdd) {
+            appendOperator('+');
+        } else if (e.getSource() == buttonSubtract) {
+            appendOperator('-');
+        } else if (e.getSource() == buttonMultiply) {
+            appendOperator('*');
+        } else if (e.getSource() == buttonDivide) {
+            appendOperator('/');
+        } else if (e.getSource() == buttonEquals) {
+            calculateResult(); // Calculate the result of the current expression
+        } else if (e.getSource() == buttonClear) {
+            clearDisplay(); // Clear the display and reset the expression
         }
     }
 
-    private void handleOperator(char operator) {
-        if (currentExpression.length() > 0 && !isOperator(currentExpression.charAt(currentExpression.length() - 1))) {
-            textfield.setText(textfield.getText() + operator);
-            currentExpression.append(operator); // Append operator to the expression
+    // Append a digit to the current input
+    private void appendDigit(int digit) {
+        if (fieldDisplay.getText().equals("0")) { // If current display is 0, replace it
+            fieldDisplay.setText("");
+            expressionInput.setLength(0); // Clear the stored expression
+        }
+        fieldDisplay.setText(fieldDisplay.getText() + digit); // Update display with new digit
+        expressionInput.append(digit); // Append digit to the expression
+    }
+
+    // Append an operator to the current input
+    private void appendOperator(char operator) {
+        // Append operator only if the last character is not already an operator
+        if (expressionInput.length() > 0 && !isOperator(expressionInput.charAt(expressionInput.length() - 1))) {
+            fieldDisplay.setText(fieldDisplay.getText() + operator); // Update display with operator
+            expressionInput.append(operator); // Append operator to the expression
         }
     }
 
-    private boolean isOperator(char ch) {
-        return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+    // Check if a character is an operator
+    private boolean isOperator(char character) {
+        return character == '+' || character == '-' || character == '*' || character == '/';
     }
 
+    // Calculate the result of the current expression
+    private void calculateResult() {
+        try {
+            double result = evaluateExpression(expressionInput.toString()); // Evaluate the expression
+            fieldDisplay.setText(formatResult(result)); // Display formatted result
+            expressionInput.setLength(0); // Reset expression after showing the result
+            expressionInput.append(result); // Store the result for further calculations
+        } catch (Exception ex) {
+            fieldDisplay.setText("Error"); // Display error message on exception
+            expressionInput.setLength(0); // Clear the expression on error
+        }
+    }
+
+    // Clear the display and reset the expression
+    private void clearDisplay() {
+        fieldDisplay.setText("0"); // Reset display to 0
+        expressionInput.setLength(0); // Clear the stored expression
+    }
+
+    // Evaluate a mathematical expression represented as a string
     private double evaluateExpression(String expression) {
-        return new Object() {
-            int pos = -1, ch;
+        return new Object() { // Anonymous class for parsing and evaluating the expression
+            int index = -1, currentCharacter;
 
-            void nextChar() {
-                ch = (++pos < expression.length()) ? expression.charAt(pos) : -1;
+            void nextCharacter() {
+                currentCharacter = (++index < expression.length()) ? expression.charAt(index) : -1; // Get next
+                                                                                                    // character
             }
 
-            boolean eat(int charToEat) {
-                while (ch == ' ')
-                    nextChar();
-                if (ch == charToEat) {
-                    nextChar();
+            boolean consume(int characterToEat) {
+                while (currentCharacter == ' ')
+                    nextCharacter(); // Skip spaces
+                if (currentCharacter == characterToEat) { // Check if the character matches
+                    nextCharacter();
                     return true;
                 }
                 return false;
             }
 
-            double parse() {
-                nextChar();
-                double x = parseExpression();
-                if (pos < expression.length())
-                    throw new RuntimeException("Unexpected: " + (char) ch);
-                return x;
+            double parse() { // Main parse method to evaluate the expression
+                nextCharacter();
+                double value = parseExpression(); // Parse the expression recursively
+                if (index < expression.length())
+                    throw new RuntimeException("Unexpected: " + (char) currentCharacter); // Error if there are
+                                                                                          // unexpected characters
+                return value;
             }
 
             double parseExpression() {
-                double x = parseTerm();
-                for (;;) {
-                    if (eat('+'))
-                        x += parseTerm(); // Addition
-                    else if (eat('-'))
-                        x -= parseTerm(); // Subtraction
+                double value = parseTerm();
+                for (;;) { // Handle addition and subtraction
+                    if (consume('+'))
+                        value += parseTerm(); // Addition
+                    else if (consume('-'))
+                        value -= parseTerm(); // Subtraction
                     else
-                        return x;
+                        return value; // End of expression
                 }
             }
 
             double parseTerm() {
-                double x = parseFactor();
-                for (;;) {
-                    if (eat('*'))
-                        x *= parseFactor(); // Multiplication
-                    else if (eat('/'))
-                        x /= parseFactor(); // Division
+                double value = parseFactor();
+                for (;;) { // Handle multiplication and division
+                    if (consume('*'))
+                        value *= parseFactor(); // Multiplication
+                    else if (consume('/'))
+                        value /= parseFactor(); // Division
                     else
-                        return x;
+                        return value; // End of term
                 }
             }
 
-            double parseFactor() {
-                if (eat('+'))
+            double parseFactor() { // Handle numbers and parentheses
+                if (consume('+'))
                     return parseFactor(); // Unary plus
-                if (eat('-'))
+                if (consume('-'))
                     return -parseFactor(); // Unary minus
 
-                double x;
-                int startPos = this.pos;
-                if (eat('(')) { // Parentheses
-                    x = parseExpression();
-                    eat(')');
-                } else if ((ch >= '0' && ch <= '9') || ch == '.') { // Numbers
-                    while ((ch >= '0' && ch <= '9') || ch == '.')
-                        nextChar();
-                    x = Double.parseDouble(expression.substring(startPos, this.pos));
+                double value;
+                int startIndex = this.index;
+                if (consume('(')) { // Parentheses
+                    value = parseExpression();
+                    consume(')');
+                } else if ((currentCharacter >= '0' && currentCharacter <= '9') || currentCharacter == '.') { // Numbers
+                    while ((currentCharacter >= '0' && currentCharacter <= '9') || currentCharacter == '.')
+                        nextCharacter();
+                    value = Double.parseDouble(expression.substring(startIndex, this.index)); // Parse number
                 } else {
-                    throw new RuntimeException("Unexpected: " + (char) ch);
+                    throw new RuntimeException("Unexpected: " + (char) currentCharacter); // Error for unexpected
+                                                                                          // character
                 }
-
-                return x;
+                return value;
             }
-        }.parse();
+        }.parse(); // Start parsing
+    }
+
+    // Format the result for display, removing decimal if it's a whole number
+    private String formatResult(double result) {
+        return (result == (int) result) ? String.valueOf((int) result) : String.valueOf(result);
+    }
+
+    // Main method to launch the calculator
+    public static void main(String[] args) {
+        new Calculator(); // Create a new Calculator instance
     }
 }
-
-///
