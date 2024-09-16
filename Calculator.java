@@ -211,26 +211,28 @@ public class Calculator implements ActionListener {
 
             double parseExpression() {
                 double value = parseTerm();
-                for (;;) { // Handle addition and subtraction
+                while (true) {
                     if (consume('+'))
                         value += parseTerm(); // Addition
                     else if (consume('-'))
                         value -= parseTerm(); // Subtraction
                     else
-                        return value; // End of expression
+                        break; // Exit the loop when no more '+' or '-' is found
                 }
+                return value;
             }
 
             double parseTerm() {
                 double value = parseFactor();
-                for (;;) { // Handle multiplication and division
+                while (true) {
                     if (consume('*'))
                         value *= parseFactor(); // Multiplication
                     else if (consume('/'))
                         value /= parseFactor(); // Division
                     else
-                        return value; // End of term
+                        break; // Exit the loop when no more '*' or '/' is found
                 }
+                return value;
             }
 
             double parseFactor() { // Handle numbers and parentheses
@@ -259,7 +261,11 @@ public class Calculator implements ActionListener {
 
     // Format the result for display, removing decimal if it's a whole number
     private String formatResult(double result) {
-        return (result == (int) result) ? String.valueOf((int) result) : String.valueOf(result);
+        if (result == (int) result) {
+            return String.valueOf((int) result);
+        } else {
+            return String.valueOf(result);
+        }
     }
 
     // Main method to launch the calculator
