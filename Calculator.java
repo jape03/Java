@@ -148,11 +148,8 @@ public class Calculator implements ActionListener {
 
     // Append an operator to the current input
     private void appendOperator(char operator) {
-        // Check if there is any input
         if (expressionInput.length() > 0) {
-            // Check if the last character is not an operator
             if (!isOperator(expressionInput.charAt(expressionInput.length() - 1))) {
-                // Append the operator to the display and the input
                 fieldDisplay.setText(fieldDisplay.getText() + operator);
                 expressionInput.append(operator);
             }
