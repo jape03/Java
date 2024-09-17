@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 public class Calculator implements ActionListener {
 
-    // GUI components
+    // GUI
     JFrame frameCalculator;
     JTextField fieldDisplay;
     JButton[] buttonsDigits = new JButton[10];
@@ -26,7 +26,7 @@ public class Calculator implements ActionListener {
         initializeButtons();
         initializePanel();
 
-        frameCalculator.setVisible(true); //
+        frameCalculator.setVisible(true);
     }
 
     // Initialize the main frame
@@ -51,9 +51,9 @@ public class Calculator implements ActionListener {
         frameCalculator.add(fieldDisplay);
     }
 
-    // Initialize all buttons (digits and operations)
+    // Initialize all buttons
     public void initializeButtons() {
-        // Create operation buttons
+
         buttonAdd = createButton("+");
         buttonSubtract = createButton("-");
         buttonMultiply = createButton("*");
