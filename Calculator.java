@@ -97,7 +97,7 @@ public class Calculator implements ActionListener {
         frameCalculator.add(panelButtons);
     }
 
-    // Helper method to create a button with specified text and styling
+    // Method to create a button with specified text and styling
     private JButton createButton(String text) {
         JButton button = new JButton(text);
         button.setFont(fontDisplay);
@@ -204,7 +204,7 @@ public class Calculator implements ActionListener {
                 return false;
             }
 
-            double parse() { // Main parse method to evaluate the expression
+            double parse() {
                 nextCharacter();
                 double value = parseExpression();
                 if (index < expression.length())
@@ -238,7 +238,7 @@ public class Calculator implements ActionListener {
                 return value;
             }
 
-            double parseFactor() { // Handle numbers and parentheses
+            double parseFactor() {
                 if (consume('+'))
                     return parseFactor();
                 if (consume('-'))
@@ -246,16 +246,12 @@ public class Calculator implements ActionListener {
 
                 double value;
                 int startIndex = this.index;
-                if (consume('(')) {
-                    value = parseExpression();
-                    consume(')');
-                } else if ((currentCharacter >= '0' && currentCharacter <= '9') || currentCharacter == '.') {
+                if ((currentCharacter >= '0' && currentCharacter <= '9') || currentCharacter == '.') {
                     while ((currentCharacter >= '0' && currentCharacter <= '9') || currentCharacter == '.')
                         nextCharacter();
                     value = Double.parseDouble(expression.substring(startIndex, this.index));
                 } else {
                     throw new RuntimeException("Unexpected: " + (char) currentCharacter);
-
                 }
                 return value;
             }
