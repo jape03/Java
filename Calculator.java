@@ -6,19 +6,18 @@ import java.awt.event.ActionListener;
 public class Calculator implements ActionListener {
 
     // GUI components
-    private JFrame frameCalculator;
-    private JTextField fieldDisplay;
-    private JButton[] buttonsDigits = new JButton[10];
-    private JButton buttonAdd, buttonSubtract, buttonMultiply, buttonDivide, buttonEquals, buttonClear;
-    private JPanel panelButtons;
-    private Font fontDisplay = new Font("Arial", Font.BOLD, 24);
-    private StringBuilder expressionInput = new StringBuilder();
+    JFrame frameCalculator;
+    JTextField fieldDisplay;
+    JButton[] buttonsDigits = new JButton[10];
+    JButton buttonAdd, buttonSubtract, buttonMultiply, buttonDivide, buttonEquals, buttonClear;
+    JPanel panelButtons;
+    Font fontDisplay = new Font("Arial", Font.BOLD, 24);
+    Color backgroundColor = new Color(30, 30, 30);
+    Color buttonColor = new Color(60, 60, 60);
+    Color equalsButtonColor = new Color(0, 122, 204);
+    Color textColor = Color.WHITE;
 
-    // Color scheme for the calculator
-    private Color backgroundColor = new Color(30, 30, 30);
-    private Color buttonColor = new Color(60, 60, 60);
-    private Color equalsButtonColor = new Color(0, 122, 204);
-    private Color textColor = Color.WHITE;
+    StringBuilder expressionInput = new StringBuilder();
 
     public Calculator() {
         // Initialize components and show the frame
@@ -31,7 +30,7 @@ public class Calculator implements ActionListener {
     }
 
     // Initialize the main frame
-    private void initializeFrame() {
+    public void initializeFrame() {
         frameCalculator = new JFrame("Calculator");
         frameCalculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameCalculator.setSize(400, 550);
@@ -40,7 +39,7 @@ public class Calculator implements ActionListener {
     }
 
     // Initialize the display field
-    private void initializeDisplay() {
+    public void initializeDisplay() {
         fieldDisplay = new JTextField("0");
         fieldDisplay.setBounds(30, 25, 340, 50);
         fieldDisplay.setFont(fontDisplay);
@@ -53,7 +52,7 @@ public class Calculator implements ActionListener {
     }
 
     // Initialize all buttons (digits and operations)
-    private void initializeButtons() {
+    public void initializeButtons() {
         // Create operation buttons
         buttonAdd = createButton("+");
         buttonSubtract = createButton("-");
@@ -70,7 +69,7 @@ public class Calculator implements ActionListener {
     }
 
     // Initialize the panel to hold all buttons
-    private void initializePanel() {
+    public void initializePanel() {
         panelButtons = new JPanel();
         panelButtons.setBounds(30, 100, 340, 340);
         panelButtons.setLayout(new GridLayout(4, 4, 10, 10));
@@ -98,7 +97,7 @@ public class Calculator implements ActionListener {
     }
 
     // Method to create a button with specified text and styling
-    private JButton createButton(String text) {
+    public JButton createButton(String text) {
         JButton button = new JButton(text);
         button.setFont(fontDisplay);
         button.setFocusable(false);
@@ -132,12 +131,12 @@ public class Calculator implements ActionListener {
         } else if (e.getSource() == buttonEquals) {
             calculateResult();
         } else if (e.getSource() == buttonClear) {
-            clearDisplay();
+            clear();
         }
     }
 
     // Append a digit to the current input
-    private void appendDigit(int digit) {
+    public void appendDigit(int digit) {
         if (fieldDisplay.getText().equals("0")) {
             fieldDisplay.setText("");
             expressionInput.setLength(0);
@@ -147,7 +146,7 @@ public class Calculator implements ActionListener {
     }
 
     // Append an operator to the current input
-    private void appendOperator(char operator) {
+    public void appendOperator(char operator) {
         if (expressionInput.length() > 0) {
             if (!isOperator(expressionInput.charAt(expressionInput.length() - 1))) {
                 fieldDisplay.setText(fieldDisplay.getText() + operator);
@@ -157,15 +156,15 @@ public class Calculator implements ActionListener {
     }
 
     // Check if a character is an operator
-    private boolean isOperator(char character) {
+    public boolean isOperator(char character) {
         return character == '+' || character == '-' || character == '*' || character == '/';
     }
 
     // Calculate the result of the current expression
-    private void calculateResult() {
+    public void calculateResult() {
         try {
-            double result = evaluateExpression(expressionInput.toString());
-            fieldDisplay.setText(formatResult(result));
+            double result = evaluate(expressionInput.toString());
+            fieldDisplay.setText(format(result));
             expressionInput.setLength(0);
             expressionInput.append(result);
         } catch (Exception ex) {
@@ -175,13 +174,13 @@ public class Calculator implements ActionListener {
     }
 
     // Clear the display and reset the expression
-    private void clearDisplay() {
+    public void clear() {
         fieldDisplay.setText("0");
         expressionInput.setLength(0);
     }
 
     // Evaluate a mathematical expression represented as a string
-    private double evaluateExpression(String expression) {
+    public double evaluate(String expression) {
         return new Object() {
             int index = -1, currentCharacter;
 
@@ -259,7 +258,7 @@ public class Calculator implements ActionListener {
     }
 
     // Format the result for display, removing decimal if it's a whole number
-    private String formatResult(double result) {
+    public String format(double result) {
         if (result == (int) result) {
             return String.valueOf((int) result);
         } else {
