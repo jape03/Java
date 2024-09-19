@@ -175,7 +175,7 @@ public class Registration {
         frameRegistration.setVisible(true);
     }
 
-    private void clearFields() {
+    public void clearFields() {
         fieldDisplayName.setText("");
         fieldCourse.setSelectedIndex(0);
         fieldYear.setSelectedIndex(0);
@@ -185,15 +185,21 @@ public class Registration {
         fieldDisplayContact.setText("");
     }
 
-    private void registerUser() {
+    public void registerUser() {
         // Gather data from form
         String name = fieldDisplayName.getText();
         String course = (String) fieldCourse.getSelectedItem();
         String year = (String) fieldYear.getSelectedItem();
-        String gender = radioMale.isSelected() ? "Male" : radioFemale.isSelected() ? "Female" : "";
         String address = fieldDisplayAddress.getText();
         String email = fieldDisplayEmail.getText();
         String contact = fieldDisplayContact.getText();
+
+        String gender = "";
+        if (radioMale.isSelected()) {
+            gender = "Male";
+        } else if (radioFemale.isSelected()) {
+            gender = "Female";
+        }
 
         // Input validation
         if (name.isEmpty() || course.isEmpty() || year.isEmpty() || gender.isEmpty() || address.isEmpty()
