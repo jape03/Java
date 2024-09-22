@@ -6,6 +6,7 @@ import java.awt.*;
  * With a simple GUI, the registration form also can validate user input
  * and ensure that theres no missing field before register
  */
+
 public class Registration {
 
     JFrame frameRegistration;
