@@ -1,6 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The Registration class creates a GUI for the user registration form.
+ * With a simple GUI, the registration form also can validate user input
+ * and ensure that theres no missing field before register
+ */
 public class Registration {
 
     JFrame frameRegistration;
@@ -8,42 +13,42 @@ public class Registration {
     JComboBox<String> fieldCourse, fieldYear;
     JRadioButton radioMale, radioFemale;
     JButton buttonRegister, buttonClear, buttonExit;
-    ButtonGroup genderGroup;
+    ButtonGroup buttonGender;
+    Font fontDisplay = new Font("Arial", Font.PLAIN, 14);
 
     public Registration() {
         initializeFrame();
     }
 
+    /**
+     * Initializes the JFrame and GUI components for the registration form.
+     */
     public void initializeFrame() {
+
         frameRegistration = new JFrame("Registration Form");
         frameRegistration.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameRegistration.setSize(400, 400);
         frameRegistration.getContentPane().setBackground(Color.DARK_GRAY);
         frameRegistration.setLayout(null);
 
-        // Set a minimalist font
-        Font minimalistFont = new Font("Arial", Font.PLAIN, 14);
-
-        // Name
         JLabel labelName = new JLabel("Name:");
         labelName.setBounds(30, 30, 100, 30);
         labelName.setForeground(Color.WHITE);
-        labelName.setFont(minimalistFont);
+        labelName.setFont(fontDisplay);
         frameRegistration.add(labelName);
 
         fieldDisplayName = new JTextField();
         fieldDisplayName.setBounds(140, 30, 200, 30);
         fieldDisplayName.setBackground(Color.GRAY);
         fieldDisplayName.setForeground(Color.WHITE);
-        fieldDisplayName.setFont(minimalistFont);
+        fieldDisplayName.setFont(fontDisplay);
         fieldDisplayName.setBorder(BorderFactory.createEmptyBorder());
         frameRegistration.add(fieldDisplayName);
 
-        // Course
         JLabel labelCourse = new JLabel("Course:");
         labelCourse.setBounds(30, 70, 100, 30);
         labelCourse.setForeground(Color.WHITE);
-        labelCourse.setFont(minimalistFont);
+        labelCourse.setFont(fontDisplay);
         frameRegistration.add(labelCourse);
 
         String[] courses = { "BSCSSE", "BSCSDS", "BSCSAI", "BSIT" };
@@ -51,15 +56,14 @@ public class Registration {
         fieldCourse.setBounds(140, 70, 200, 30);
         fieldCourse.setBackground(Color.GRAY);
         fieldCourse.setForeground(Color.WHITE);
-        fieldCourse.setFont(minimalistFont);
+        fieldCourse.setFont(fontDisplay);
         fieldCourse.setBorder(BorderFactory.createEmptyBorder());
         frameRegistration.add(fieldCourse);
 
-        // Year
         JLabel labelYear = new JLabel("Year:");
         labelYear.setBounds(30, 110, 100, 30);
         labelYear.setForeground(Color.WHITE);
-        labelYear.setFont(minimalistFont);
+        labelYear.setFont(fontDisplay);
         frameRegistration.add(labelYear);
 
         String[] years = { "1st", "2nd", "3rd", "4th" };
@@ -67,126 +71,125 @@ public class Registration {
         fieldYear.setBounds(140, 110, 200, 30);
         fieldYear.setBackground(Color.GRAY);
         fieldYear.setForeground(Color.WHITE);
-        fieldYear.setFont(minimalistFont);
+        fieldYear.setFont(fontDisplay);
         fieldYear.setBorder(BorderFactory.createEmptyBorder());
         frameRegistration.add(fieldYear);
 
-        // Gender
         JLabel labelGender = new JLabel("Gender:");
         labelGender.setBounds(30, 150, 100, 30);
         labelGender.setForeground(Color.WHITE);
-        labelGender.setFont(minimalistFont);
+        labelGender.setFont(fontDisplay);
         frameRegistration.add(labelGender);
 
         radioMale = new JRadioButton("Male");
         radioMale.setBounds(140, 150, 80, 30);
         radioMale.setBackground(Color.DARK_GRAY);
         radioMale.setForeground(Color.WHITE);
-        radioMale.setFont(minimalistFont);
+        radioMale.setFont(fontDisplay);
 
         radioFemale = new JRadioButton("Female");
         radioFemale.setBounds(230, 150, 80, 30);
         radioFemale.setBackground(Color.DARK_GRAY);
         radioFemale.setForeground(Color.WHITE);
-        radioFemale.setFont(minimalistFont);
+        radioFemale.setFont(fontDisplay);
 
-        // Group for radio buttons
-        genderGroup = new ButtonGroup();
-        genderGroup.add(radioMale);
-        genderGroup.add(radioFemale);
+        buttonGender = new ButtonGroup();
+        buttonGender.add(radioMale);
+        buttonGender.add(radioFemale);
 
         frameRegistration.add(radioMale);
         frameRegistration.add(radioFemale);
 
-        // Address
         JLabel labelAddress = new JLabel("Address:");
         labelAddress.setBounds(30, 190, 100, 30);
         labelAddress.setForeground(Color.WHITE);
-        labelAddress.setFont(minimalistFont);
+        labelAddress.setFont(fontDisplay);
         frameRegistration.add(labelAddress);
 
         fieldDisplayAddress = new JTextField();
         fieldDisplayAddress.setBounds(140, 190, 200, 30);
         fieldDisplayAddress.setBackground(Color.GRAY);
         fieldDisplayAddress.setForeground(Color.WHITE);
-        fieldDisplayAddress.setFont(minimalistFont);
+        fieldDisplayAddress.setFont(fontDisplay);
         fieldDisplayAddress.setBorder(BorderFactory.createEmptyBorder());
         frameRegistration.add(fieldDisplayAddress);
 
-        // Email
         JLabel labelEmail = new JLabel("Email:");
         labelEmail.setBounds(30, 230, 100, 30);
         labelEmail.setForeground(Color.WHITE);
-        labelEmail.setFont(minimalistFont);
+        labelEmail.setFont(fontDisplay);
         frameRegistration.add(labelEmail);
 
         fieldDisplayEmail = new JTextField();
         fieldDisplayEmail.setBounds(140, 230, 200, 30);
         fieldDisplayEmail.setBackground(Color.GRAY);
         fieldDisplayEmail.setForeground(Color.WHITE);
-        fieldDisplayEmail.setFont(minimalistFont);
+        fieldDisplayEmail.setFont(fontDisplay);
         fieldDisplayEmail.setBorder(BorderFactory.createEmptyBorder());
         frameRegistration.add(fieldDisplayEmail);
 
-        // Contact Number
         JLabel labelContact = new JLabel("Contact Number:");
         labelContact.setBounds(30, 270, 120, 30);
         labelContact.setForeground(Color.WHITE);
-        labelContact.setFont(minimalistFont);
+        labelContact.setFont(fontDisplay);
         frameRegistration.add(labelContact);
 
         fieldDisplayContact = new JTextField();
         fieldDisplayContact.setBounds(140, 270, 200, 30);
         fieldDisplayContact.setBackground(Color.GRAY);
         fieldDisplayContact.setForeground(Color.WHITE);
-        fieldDisplayContact.setFont(minimalistFont);
+        fieldDisplayContact.setFont(fontDisplay);
         fieldDisplayContact.setBorder(BorderFactory.createEmptyBorder());
         frameRegistration.add(fieldDisplayContact);
 
-        // Buttons
         buttonRegister = new JButton("REGISTER");
         buttonRegister.setBounds(50, 320, 110, 30);
         buttonRegister.setBackground(Color.BLUE);
         buttonRegister.setForeground(Color.WHITE);
-        buttonRegister.setFont(minimalistFont);
+        buttonRegister.setFont(fontDisplay);
         frameRegistration.add(buttonRegister);
 
         buttonClear = new JButton("CLEAR");
         buttonClear.setBounds(160, 320, 110, 30);
         buttonClear.setBackground(Color.BLUE);
         buttonClear.setForeground(Color.WHITE);
-        buttonClear.setFont(minimalistFont);
+        buttonClear.setFont(fontDisplay);
         frameRegistration.add(buttonClear);
 
         buttonExit = new JButton("EXIT");
         buttonExit.setBounds(270, 320, 100, 30);
         buttonExit.setBackground(Color.BLUE);
         buttonExit.setForeground(Color.WHITE);
-        buttonExit.setFont(minimalistFont);
+        buttonExit.setFont(fontDisplay);
         frameRegistration.add(buttonExit);
 
-        // Action Listeners
         buttonExit.addActionListener(e -> System.exit(0));
         buttonClear.addActionListener(e -> clearFields());
 
-        // Register Button functionality
         buttonRegister.addActionListener(e -> registerUser());
 
         frameRegistration.setVisible(true);
     }
 
+    /**
+     * Clears all input fields in the registration form.
+     */
     public void clearFields() {
         fieldDisplayName.setText("");
         fieldCourse.setSelectedIndex(0);
         fieldYear.setSelectedIndex(0);
-        genderGroup.clearSelection();
+        buttonGender.clearSelection();
         fieldDisplayAddress.setText("");
         fieldDisplayEmail.setText("");
         fieldDisplayContact.setText("");
     }
 
+    /**
+     * Handles the registration process by validating inputs and displaying the
+     * entered registration details in a new window.
+     */
     public void registerUser() {
-        // Gather data from form
+
         String name = fieldDisplayName.getText();
         String course = (String) fieldCourse.getSelectedItem();
         String year = (String) fieldYear.getSelectedItem();
@@ -201,7 +204,7 @@ public class Registration {
             gender = "Female";
         }
 
-        // Input validation
+        // Check if there are no missing fields
         if (name.isEmpty() || course.isEmpty() || year.isEmpty() || gender.isEmpty() || address.isEmpty()
                 || email.isEmpty() || contact.isEmpty()) {
             JOptionPane.showMessageDialog(frameRegistration, "Please, fill out all the details", "Error",
@@ -209,20 +212,25 @@ public class Registration {
             return;
         }
 
-        // Ensure contact number is numeric
+        // Check if the name contains any numbers or special characters
+        if (!name.matches("[a-zA-Z\\s]+")) {
+            JOptionPane.showMessageDialog(frameRegistration, "Name should only contain letters", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Check contact number if its a number
         if (!contact.matches("\\d+")) {
             JOptionPane.showMessageDialog(frameRegistration, "Contact number must be a number", "Error",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Create a new JFrame to display the registration details
         JFrame frameDetails = new JFrame("Registration Details");
         frameDetails.setSize(300, 400);
         frameDetails.getContentPane().setBackground(Color.DARK_GRAY);
         frameDetails.setLayout(null);
 
-        // Display labels for each field
         JLabel labelDetails = new JLabel("Registration Details:");
         labelDetails.setBounds(50, 10, 200, 30);
         labelDetails.setForeground(Color.WHITE);
@@ -263,7 +271,6 @@ public class Registration {
         labelContactDetails.setForeground(Color.WHITE);
         frameDetails.add(labelContactDetails);
 
-        // Show the details frame
         frameDetails.setVisible(true);
     }
 
