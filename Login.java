@@ -15,7 +15,7 @@ public class Login {
     Preferences preferences = Preferences.userRoot().node(this.getClass().getName());
 
     public Login() {
-        // Check if the user is already logged in
+        // user is already logged in
         if (isUserLoggedIn()) {
 
             frameLogin = new JFrame("Welcome");
@@ -37,7 +37,7 @@ public class Login {
             buttonLogout.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     clearLogin();
-                    JOptionPane.showMessageDialog(frameLogin, "You have been logged out.");
+                    JOptionPane.showMessageDialog(frameLogin, "Logged out.");
                     frameLogin.dispose();
                     new Login();
                 }
@@ -68,7 +68,7 @@ public class Login {
 
         fieldDisplayUsername = new JTextField();
         fieldDisplayPassword = new JPasswordField();
-        checkSignedIn = new JCheckBox("Keep me signed in");
+        checkSignedIn = new JCheckBox("Stay signed in");
         checkSignedIn.setForeground(Color.WHITE);
         checkSignedIn.setBackground(new Color(60, 63, 65));
 
@@ -90,7 +90,7 @@ public class Login {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setBackground(new Color(60, 63, 65));
 
-        buttonLogin = new JButton("REGISTER");
+        buttonLogin = new JButton("LOGIN");
         buttonLogin.setPreferredSize(new Dimension(110, 30));
         buttonLogin.setBackground(new Color(30, 144, 255));
         buttonLogin.setForeground(Color.WHITE);
@@ -187,7 +187,7 @@ public class Login {
         return preferences.getBoolean("loggedIn", false);
     }
 
-    // Clear login state
+    // Clear login
     public void clearLogin() {
         preferences.putBoolean("loggedIn", false);
         preferences.remove("username");
