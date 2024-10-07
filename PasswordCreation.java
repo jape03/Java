@@ -7,43 +7,13 @@ import java.util.prefs.Preferences;
 public class PasswordCreation {
 
     JFrame framePasswordCreation;
-    JPasswordField fieldDisplayPassword;
-    JButton buttonPasswordCreation, buttonClear, buttonCloseButton, buttonLogout, buttonPanel;
+    JPasswordField fieldNewPassword, fieldConfirmPassword;
+    JButton buttonPasswordCreation, buttonClear, buttonCloseButton;
     Font fontDisplay = new Font("Arial", Font.PLAIN, 16);
     Preferences preferences = Preferences.userRoot().node(this.getClass().getName());
 
     public PasswordCreation() {
-        // user is already logged in
-        if (isPasswordSaved()) {
-
-            buttonLogout = new JButton("LOGOUT");
-            buttonLogout.setPreferredSize(new Dimension(110, 30));
-            buttonLogout.setBackground(new Color(220, 20, 60));
-            buttonLogout.setForeground(Color.WHITE);
-            buttonLogout.setFocusPainted(false);
-
-            buttonLogout.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    // clearPasswordCreation(); must be fixed, cause of error
-                    JOptionPane.showMessageDialog(framePasswordCreation, "Logged out.");
-                    framePasswordCreation.dispose();
-                    new PasswordCreation();
-                }
-            });
-
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(new Color(60, 63, 65));
-            buttonPanel.add(buttonLogout);
-
-            framePasswordCreation.add(buttonPanel, BorderLayout.SOUTH);
-
-            framePasswordCreation.setLocationRelativeTo(null);
-            framePasswordCreation.setVisible(true);
-
-            return;
-        }
-
-        framePasswordCreation = new JFrame("PasswordCreation");
+        framePasswordCreation = new JFrame("Password Creation");
         framePasswordCreation.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         framePasswordCreation.setSize(400, 300);
         framePasswordCreation.getContentPane().setBackground(new Color(60, 63, 65));
@@ -53,11 +23,33 @@ public class PasswordCreation {
         mainPanel.setBackground(new Color(60, 63, 65));
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        fieldDisplayPassword = new JPasswordField();
+        fieldNewPassword = new JPasswordField();
+        fieldConfirmPassword = new JPasswordField();
 
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        fieldNewPassword.setForeground(Color.WHITE);
+        fieldNewPassword.setBackground(new Color(40, 40, 40));
+        fieldConfirmPassword.setForeground(Color.WHITE);
+        fieldConfirmPassword.setBackground(new Color(40, 40, 40));
+
+        fieldNewPassword.setCaretColor(Color.WHITE);
+        fieldConfirmPassword.setCaretColor(Color.WHITE);
+
+        JLabel labelNewPassword = new JLabel("New Password:");
+        JLabel labelConfirmPassword = new JLabel("Confirm Password:");
+        labelNewPassword.setForeground(Color.WHITE);
+        labelConfirmPassword.setForeground(Color.WHITE);
+
+        JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         formPanel.setBackground(new Color(60, 63, 65));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        formPanel.add(labelNewPassword);
+        formPanel.add(fieldNewPassword);
+        formPanel.add(labelConfirmPassword);
+        formPanel.add(fieldConfirmPassword);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(60, 63, 65));
 
         buttonPasswordCreation = new JButton("SAVE");
         buttonPasswordCreation.setPreferredSize(new Dimension(110, 30));
@@ -81,42 +73,32 @@ public class PasswordCreation {
         buttonPanel.add(buttonClear);
         buttonPanel.add(buttonCloseButton);
 
-        // This comment should be a try catch instead of an if else
-        /*
-         * buttonPasswordCreation.addActionListener(new ActionListener() {
-         * public void actionPerformed(ActionEvent e) {
-         * 
-         * String username = fieldDisplayUsername.getText();
-         * String password = new String(fieldDisplayPassword.getPassword());
-         * 
-         * if (checkUser(username) && checkPassword(password)) {
-         * JOptionPane.showMessageDialog(framePasswordCreation,
-         * "PasswordCreation successful");
-         * 
-         * if (checkSignedIn.isSelected()) {
-         * checkedPasswordCreation(username);
-         * }
-         * 
-         * framePasswordCreation.dispose();
-         * } else if (!checkUser(username)) {
-         * JOptionPane.showMessageDialog(framePasswordCreation,
-         * "Invalid username format. Username format: Initial of First Name, Initial of Middle Name and complete Last Name ex. ADAquino"
-         * );
-         * } else if (!checkPassword(password)) {
-         * JOptionPane.showMessageDialog(framePasswordCreation,
-         * "Invalid password. The password must have at least 8 characters, must have at least one char both lower and uppercase, one number and one special character."
-         * );
-         * }
-         * }
-         * });
-         */
+        buttonPasswordCreation.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String newPassword = new String(fieldNewPassword.getPassword());
+                String confirmPassword = new String(fieldConfirmPassword.getPassword());
+                String savedPassword = preferences.get("savedPassword", "");
+
+                try {
+                    validatePasswords(newPassword, confirmPassword, savedPassword);
+                    preferences.put("savedPassword", newPassword);
+                    JOptionPane.showMessageDialog(framePasswordCreation, "Password saved successfully.");
+                    preferences.putBoolean("loggedIn", true);
+                    framePasswordCreation.dispose();
+                    new PasswordCreation();
+                } catch (PasswordMatch exception) {
+                    JOptionPane.showMessageDialog(framePasswordCreation, exception.getMessage());
+                } catch (PasswordCriteria exception) {
+                    JOptionPane.showMessageDialog(framePasswordCreation, exception.getMessage());
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(framePasswordCreation, "Error: " + exception.getMessage());
+                }
+            }
+        });
 
         buttonClear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
-                fieldDisplayPassword.setText("");
-
-                // clearPasswordCreation(); must be fixed also, caused of error
+                clearPasswordCreation();
             }
         });
 
@@ -135,7 +117,38 @@ public class PasswordCreation {
         framePasswordCreation.setVisible(true);
     }
 
-    // Validate password
+    class PasswordMatch extends Exception {
+        public PasswordMatch(String message) {
+            super(message);
+        }
+    }
+
+    class PasswordCriteria extends Exception {
+        public PasswordCriteria(String message) {
+            super(message);
+        }
+    }
+
+    // password with exceptions
+    public void validatePasswords(String newPassword, String confirmPassword, String savedPassword)
+            throws PasswordMatch, PasswordCriteria {
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new PasswordMatch("Passwords do not match. Try again.");
+        }
+
+        if (newPassword.equals(savedPassword)) {
+            throw new PasswordMatch(
+                    "The new password cannot be the same as the current password. Please try a different password.");
+        }
+
+        if (!checkPassword(newPassword)) {
+            throw new PasswordCriteria(
+                    "Invalid password. Password must be at least 8 characters, must have at least one char both lower and uppercase, one number, and one special character.");
+        }
+    }
+
+    // password criteria
     public boolean checkPassword(String password) {
         return password.length() >= 8 &&
                 password.matches(".*[a-z].*") &&
@@ -144,9 +157,9 @@ public class PasswordCreation {
                 password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
     }
 
-    // Check if the user is logged in
-    public boolean isPasswordSaved() {
-        return preferences.getBoolean("loggedIn", false);
+    public void clearPasswordCreation() {
+        fieldNewPassword.setText("");
+        fieldConfirmPassword.setText("");
     }
 
     public static void main(String[] args) {
