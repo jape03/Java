@@ -1,0 +1,28 @@
+[M6-LAB] Collections and Concurrency 
+
+1. Discuss the programming paradigms you used in the program.
+
+The program defines a class called ContentManagement_T6, which represents a content management system for font settings. This class encapsulates related properties, such as font labels, style options, and color selectors, along with behaviors like user interaction. By extending JFrame, it inherits GUI capabilities, illustrating the principle of inheritance in object-oriented programming. Through this class structure, we implement object-oriented principles, making our code modular and easy to expand or modify as needed.
+
+The program uses the Imperative programming paradigm, which directs step-by-step commands to manage its state. This approach specifies both the goals and the detailed steps to achieve them, such as adjusting GUI elements in response to user actions. It allows for precise control over the program's behavior, ensuring that user interactions lead to the intended updates in the interface.
+
+
+2. Explain the significance and the difference of each paradigm you use.
+
+Object-Oriented Programming  is vital for our program as it provides structure and modularity.Inheriting from JFrame allows us to utilize key GUI features, enabling us to focus on specific functionalities without having to recreate basic elements. This inheritance simplifies our code and facilitates easy addition or modification of features, making the program more maintainable and scalable as we adapt to user needs.
+
+The Imperative programming paradigm allows us to define exact steps to achieve specific goals, guiding program execution clearly. This gives us direct control over the program’s state, enabling us to manage how different parts behave in response to user actions. For instance, we specify how GUI elements change when a user selects a different font style or color. This level of control ensures predictable and reliable program functionality, as we outline each step needed for the desired outcome.
+
+[M7-LAB] Lexical Analysis
+
+1. Discuss your process of analyzing the comment.
+
+Our user comment analysis uses keyword matching to assess sentiment, with checks for valid input, negation handling, and sentiment classification. Once validated, the comment is preprocessed using a StringTokenizer to break it into words. The program checks each word against predefined positive and negative keywords, along with negation words that can change the sentiment. 
+
+The code counts positive and negative word occurrences to determine the overall sentiment, labeling comments as positive, negative, neutral, or lacking recognizable sentiment. This approach provides basic sentiment analysis.
+
+2. What are the Java classes uses for lexical analysis? Explain each.
+
+In our program, we use several Java classes for lexical analysis. The main tool is StringTokenizer from the java.util package, which breaks comments into individual tokens or words. This helps us analyze each word against predefined lists of positive, negative, and negation keywords.
+
+We also use regular expressions with String.matches() to ensure comments contain only alphabetic characters and spaces, preventing interference from special characters or numbers. If invalid characters are found, the program prompts the user to enter alphabetic input only. In the preprocessComment function, String.replaceAll() removes any non-alphabetic characters and converts the comment to lowercase, ensuring standardized, case-insensitive comparisons during sentiment analysis. These classes and methods work together to validate input, tokenize words, and accurately match them against sentiment keywords.
